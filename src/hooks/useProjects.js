@@ -12,9 +12,10 @@ export const useProjects = (params = {}) => {
     setError(null);
     try {
       const response = await projectService.getAll(queryParams);
-      setProjects(response.data);
-      setPagination(response.pagination);
+      setProjects(Array.isArray(response?.data) ? response.data : []);
+      setPagination(response?.pagination || null);
     } catch (err) {
+      setProjects([]);
       setError(err.message || "Failed to load projects");
     } finally {
       setLoading(false);
@@ -36,9 +37,10 @@ export const useFeaturedProjects = () => {
     const fetch = async () => {
       try {
         const response = await projectService.getFeatured();
-        setProjects(response.data);
+        setProjects(Array.isArray(response?.data) ? response.data : []);
       } catch (err) {
         console.error(err);
+        setProjects([]);
       } finally {
         setLoading(false);
       }

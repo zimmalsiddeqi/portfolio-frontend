@@ -14,13 +14,15 @@ const ProjectGrid = () => {
   const { projects, loading } = useProjects({ limit: 50 });
 
   const categories = ["All", ...PROJECT_CATEGORIES];
+  const projectList = Array.isArray(projects) ? projects : [];
 
-  const filteredProjects = projects.filter((project) => {
+  const filteredProjects = projectList.filter((project) => {
+    if (!project) return false;
     const matchesCategory = activeCategory === "All" || project.category === activeCategory;
     const matchesSearch =
       !searchQuery ||
-      project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.technologies?.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+      project.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.technologies?.some((t) => t?.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCategory && matchesSearch;
   });
 

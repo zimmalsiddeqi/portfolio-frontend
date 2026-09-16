@@ -13,12 +13,13 @@ const DashboardPage = () => {
   const [stats, setStats] = useState(null);
   const [loadingStats, setLoadingStats] = useState(true);
   const { projects, loading: loadingProjects } = useProjects({ limit: 5, sort: "newest" });
+  const projectList = Array.isArray(projects) ? projects : [];
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const response = await api.get("/dashboard/stats");
-        setStats(response.data);
+        setStats(response?.data || null);
       } catch (err) {
         console.error(err);
       } finally {
@@ -65,7 +66,7 @@ const DashboardPage = () => {
 
         {loadingProjects ? (
           <Loader />
-        ) : projects.length === 0 ? (
+        ) : projectList.length === 0 ? (
           <div className="admin-card text-center py-8 sm:py-12">
             <IoFolderOpen className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-gray-300 dark:text-dark-600 mb-4" />
             <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mb-4">No projects yet</p>
@@ -75,7 +76,7 @@ const DashboardPage = () => {
           </div>
         ) : (
           <div className="grid gap-3">
-            {projects.map((project, i) => (
+            {projectList.map((project, i) => (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 0, x: -20 }}

@@ -8,7 +8,10 @@ const MessagesPage = () => {
   const [filter, setFilter] = useState("all");
   const { messages, loading, refetch, unreadCount } = useMessages({ limit: 50 });
 
-  const filteredMessages = messages.filter((m) => {
+  const messageList = Array.isArray(messages) ? messages : [];
+
+  const filteredMessages = messageList.filter((m) => {
+    if (!m) return false;
     if (filter === "unread") return !m.is_read;
     if (filter === "read") return m.is_read;
     return true;
@@ -23,16 +26,16 @@ const MessagesPage = () => {
       <div>
         <h1 className="text-2xl sm:text-3xl font-display font-bold mb-1">Messages</h1>
         <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
-          {messages.length} total, {unreadCount} unread
+          {messageList.length} total, {unreadCount} unread
         </p>
       </div>
 
       {/* Filter Tabs */}
       <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
         {[
-          { key: "all", label: `All (${messages.length})` },
+          { key: "all", label: `All (${messageList.length})` },
           { key: "unread", label: `Unread (${unreadCount})` },
-          { key: "read", label: `Read (${messages.length - unreadCount})` },
+          { key: "read", label: `Read (${Math.max(0, messageList.length - unreadCount)})` },
         ].map((tab) => (
           <button
             key={tab.key}

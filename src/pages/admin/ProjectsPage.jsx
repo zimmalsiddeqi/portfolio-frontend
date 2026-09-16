@@ -13,8 +13,11 @@ const ProjectsPage = () => {
   const [category, setCategory] = useState("");
   const { projects, loading, refetch } = useProjects({ limit: 50 });
 
-  const filteredProjects = projects.filter((p) => {
-    const matchesSearch = !search || p.title.toLowerCase().includes(search.toLowerCase());
+  const projectList = Array.isArray(projects) ? projects : [];
+
+  const filteredProjects = projectList.filter((p) => {
+    if (!p) return false;
+    const matchesSearch = !search || p.title?.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = !category || p.category === category;
     return matchesSearch && matchesCategory;
   });

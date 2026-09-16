@@ -14,10 +14,11 @@ import MessageDetail from "./MessageDetail";
 import { timeAgo } from "../../utils/helpers";
 import contactService from "../../services/contactService";
 
-const MessageTable = ({ messages, onRefresh }) => {
+const MessageTable = ({ messages = [], onRefresh }) => {
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const messageList = Array.isArray(messages) ? messages : [];
 
   const handleToggleRead = async (id, e) => {
     e?.stopPropagation();
@@ -52,7 +53,7 @@ const MessageTable = ({ messages, onRefresh }) => {
     }
   };
 
-  if (messages.length === 0) {
+  if (messageList.length === 0) {
     return (
       <EmptyState
         icon={IoMailOutline}
@@ -66,7 +67,7 @@ const MessageTable = ({ messages, onRefresh }) => {
     <>
       <div className="space-y-3">
         <AnimatePresence>
-          {messages.map((msg, i) => (
+          {messageList.map((msg, i) => (
             <motion.div
               key={msg.id}
               initial={{ opacity: 0, y: 10 }}

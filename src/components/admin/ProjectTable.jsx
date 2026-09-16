@@ -18,9 +18,10 @@ import EmptyState from "../shared/EmptyState";
 import { STATUS_COLORS } from "../../utils/constants";
 import projectService from "../../services/projectService";
 
-const ProjectTable = ({ projects, onRefresh, loading }) => {
+const ProjectTable = ({ projects = [], onRefresh, loading }) => {
   const [deleteId, setDeleteId] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const projectList = Array.isArray(projects) ? projects : [];
 
   const handleToggleFeatured = async (id) => {
     try {
@@ -47,7 +48,7 @@ const ProjectTable = ({ projects, onRefresh, loading }) => {
     }
   };
 
-  if (projects.length === 0 && !loading) {
+  if (projectList.length === 0 && !loading) {
     return (
       <EmptyState
         icon={IoFolderOpen}
@@ -79,7 +80,7 @@ const ProjectTable = ({ projects, onRefresh, loading }) => {
             </thead>
             <tbody>
               <AnimatePresence>
-                {projects.map((project, i) => (
+                {projectList.map((project, i) => (
                   <motion.tr
                     key={project.id}
                     initial={{ opacity: 0, y: 10 }}
@@ -164,7 +165,7 @@ const ProjectTable = ({ projects, onRefresh, loading }) => {
       {/* Mobile Cards */}
       <div className="md:hidden space-y-4">
         <AnimatePresence>
-          {projects.map((project, i) => (
+          {projectList.map((project, i) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 10 }}

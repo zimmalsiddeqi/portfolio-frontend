@@ -1,6 +1,26 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const formatBaseUrl = (url) => {
+  let target = (url || "").trim();
+  if (!target) return "http://localhost:5000/api";
+
+  // If target doesn't start with http://, https://, or /, prepend https://
+  if (!target.startsWith("http://") && !target.startsWith("https://") && !target.startsWith("/")) {
+    target = `https://${target}`;
+  }
+
+  // Remove trailing slashes
+  target = target.replace(/\/+$/, "");
+
+  // If target does not end with /api, append /api
+  if (!target.endsWith("/api")) {
+    target = `${target}/api`;
+  }
+
+  return target;
+};
+
+const API_BASE_URL = formatBaseUrl(import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api");
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -24,7 +44,13 @@ api.interceptors.request.use(
 
 // Response interceptor - handle errors
 api.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    // If response is HTML instead of JSON (e.g. hitting frontend SPA fallback)
+    if (typeof response.data === "string" && response.data.trim().startsWith("<")) {
+      throw { success: false, message: "Invalid API response format (HTML received)" };
+    }
+    return response.data;
+  },
   (error) => {
     if (error.response) {
       if (error.response.status === 401) {
@@ -33,9 +59,9 @@ api.interceptors.response.use(
           window.location.href = "/admin/login";
         }
       }
-      throw error.response.data;
+      throw error.response.data || { success: false, message: "Server error" };
     }
-    throw { success: false, message: "Network error. Please check your connection." };
+    throw { success: false, message: error.message || "Network error. Please check your connection." };
   }
 );
 

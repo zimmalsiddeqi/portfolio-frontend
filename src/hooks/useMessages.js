@@ -11,10 +11,11 @@ export const useMessages = (params = {}) => {
     setLoading(true);
     try {
       const response = await contactService.getAll(queryParams);
-      setMessages(response.data);
-      setPagination(response.pagination);
+      setMessages(Array.isArray(response?.data) ? response.data : []);
+      setPagination(response?.pagination || null);
     } catch (err) {
       console.error(err);
+      setMessages([]);
     } finally {
       setLoading(false);
     }
@@ -23,7 +24,7 @@ export const useMessages = (params = {}) => {
   const fetchUnreadCount = useCallback(async () => {
     try {
       const response = await contactService.getUnreadCount();
-      setUnreadCount(response.data.count);
+      setUnreadCount(response?.data?.count || 0);
     } catch (err) {
       console.error(err);
     }

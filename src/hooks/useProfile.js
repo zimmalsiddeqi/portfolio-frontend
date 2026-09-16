@@ -10,8 +10,9 @@ export const useProfile = () => {
     setLoading(true);
     try {
       const response = await profileService.get();
-      setProfile(response.data);
+      setProfile(response?.data || null);
     } catch (err) {
+      setProfile(null);
       setError(err.message || "Failed to load profile");
     } finally {
       setLoading(false);

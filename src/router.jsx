@@ -10,6 +10,7 @@ import HomePage from "./pages/public/HomePage";
 import ProjectDetailPage from "./pages/public/ProjectDetailPage";
 import NotFoundPage from "./pages/public/NotFoundPage";
 import WhatsAppFloat from "./components/shared/WhatsAppFloat";
+import ErrorBoundary from "./components/shared/ErrorBoundary";
 
 // Admin
 import AdminLayout from "./components/admin/AdminLayout";
@@ -52,6 +53,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <PublicLayout />,
+    errorElement: <ErrorBoundary />,
     children: [
       { index: true, element: <HomePage /> },
       { path: "project/:slug", element: <ProjectDetailPage /> },
@@ -60,6 +62,7 @@ const router = createBrowserRouter([
   {
     path: "/admin/login",
     element: <LoginPage />,
+    errorElement: <ErrorBoundary />,
   },
   {
     path: "/admin",
@@ -68,6 +71,7 @@ const router = createBrowserRouter([
         <AdminLayout />
       </ProtectedRoute>
     ),
+    errorElement: <ErrorBoundary />,
     children: [
       { index: true, element: <Navigate to="/admin/dashboard" replace /> },
       { path: "dashboard", element: <DashboardPage /> },
