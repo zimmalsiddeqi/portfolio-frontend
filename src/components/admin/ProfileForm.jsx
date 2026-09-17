@@ -166,6 +166,10 @@ const ProfileForm = ({ profile, onSuccess }) => {
           currentImage={formData.avatar_url}
           onUpload={handleAvatarUpload}
           onRemove={() => setFormData((prev) => ({ ...prev, avatar_url: "" }))}
+          enableCrop={true}
+          cropShape="round"
+          aspect={1}
+          cropTitle="Crop Profile Photo"
         />
 
         <div className="grid md:grid-cols-2 gap-5">

@@ -292,7 +292,15 @@ const ProjectForm = ({ existingProject = null, mode = "create" }) => {
         {/* Cover Image */}
         <div className="admin-card space-y-4 !p-4 sm:!p-6">
           <h2 className="text-base sm:text-lg font-semibold border-b border-gray-200 dark:border-dark-600 pb-3">Cover Image</h2>
-          <ImageUploader currentImage={formData.cover_image_url} onUpload={handleCoverUpload} onRemove={removeCover} />
+          <ImageUploader
+            currentImage={formData.cover_image_url}
+            onUpload={handleCoverUpload}
+            onRemove={removeCover}
+            enableCrop={true}
+            cropShape="rect"
+            aspect={16 / 9}
+            cropTitle="Crop Cover Image (16:9)"
+          />
         </div>
 
         {/* Screenshots */}
