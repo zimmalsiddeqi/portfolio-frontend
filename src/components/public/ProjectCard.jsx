@@ -106,14 +106,45 @@ const ProjectCard = ({ project, index = 0 }) => {
           )}
         </div>
 
-        {/* View More */}
-        <Link
-          to={`/project/${project.slug}`}
-          className="inline-flex items-center gap-2 text-sm font-semibold text-primary-500 hover:text-primary-400 transition-colors group/link"
-        >
-          View Details
-          <IoArrowForward className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
-        </Link>
+        {/* Actions & Links */}
+        <div className="pt-4 mt-auto border-t border-gray-100 dark:border-dark-700/80 flex items-center justify-between gap-2">
+          <Link
+            to={`/project/${project.slug}`}
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-primary-500 hover:text-primary-400 transition-colors group/link"
+          >
+            <span>Details</span>
+            <IoArrowForward className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-1" />
+          </Link>
+
+          <div className="flex items-center gap-2">
+            {project.github_url && (
+              <a
+                href={project.github_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-dark-700 hover:bg-primary-500/10 hover:text-primary-500 dark:hover:text-primary-400 border border-gray-200/60 dark:border-dark-600 transition-all duration-200"
+                title="View GitHub Repository"
+              >
+                <IoLogoGithub className="w-4 h-4" />
+                <span className="hidden sm:inline">Code</span>
+              </a>
+            )}
+            {project.live_url && (
+              <a
+                href={project.live_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 shadow-sm transition-all duration-200"
+                title="View Live Website"
+              >
+                <IoOpen className="w-3.5 h-3.5" />
+                <span>Live Demo</span>
+              </a>
+            )}
+          </div>
+        </div>
       </div>
     </GlassCard>
   );
